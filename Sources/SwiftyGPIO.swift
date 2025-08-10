@@ -178,7 +178,7 @@ fileprivate extension GPIO {
             return fwrite(buffer.baseAddress, buffer.count, 1, fp) - buffer.count
         }
         if res < 0 {
-            if ferror(fp) != 0 {
+            if ferror(fp!) != 0 {
                 perror("Error while writing to file")
                 abort()
             }
@@ -190,14 +190,14 @@ fileprivate extension GPIO {
 
         let fp = fopen(path, "r")
         guard fp != nil else { return nil }
-        defer { fclose(fp) }
+        defer { fclose(fp!) }
         var buf = (CChar(0), CChar(0), CChar(0), CChar(0),
                    CChar(0), CChar(0), CChar(0), CChar(0))
         return withUnsafeMutableBytes(of: &buf) { buffer in
             precondition(buffer.count == MAXLEN)
-            let len = fread(buffer.baseAddress, MAXLEN, 1, fp)
+            let len = fread(buffer.baseAddress, MAXLEN, 1, fp!)
             if len < MAXLEN {
-                if ferror(fp) != 0 {
+                if ferror(fp!) != 0 {
                     perror("Error while reading from file")
                     abort()
                 }
