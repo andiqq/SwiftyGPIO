@@ -172,10 +172,10 @@ fileprivate extension GPIO {
     func writeToFile(_ path: String, value: String) {
         let fp = fopen(path, "w")
         guard fp != nil else { return }
-        defer { fclose(fp) }
+        defer { fclose(fp!) }
         var value = value
         let res = value.withUTF8 { buffer in
-            return fwrite(buffer.baseAddress, buffer.count, 1, fp) - buffer.count
+            return fwrite(buffer.baseAddress, buffer.count, 1, fp!) - buffer.count
         }
         if res < 0 {
             if ferror(fp!) != 0 {
